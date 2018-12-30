@@ -1,0 +1,2285 @@
+{
+  "collection": {
+    "_": {
+      "postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a"
+    },
+    "item": [
+      {
+        "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+        "name": "LOAD_SCHEMA",
+        "request": {
+          "url": {
+            "path": [
+              "schema.json"
+            ],
+            "host": [
+              "{{SCHEMASERVERURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET",
+          "body": {
+            "mode": "raw",
+            "raw": ""
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+              "type": "text/javascript",
+              "exec": [
+                "pm.globals.set(\"fullschema\", pm.response.json());",
+                "let fullschema = pm.globals.get(\"fullschema\");",
+                "console.log(\"fullschema = \" +fullschema);"
+              ],
+              "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+            }
+          },
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+              "type": "text/javascript",
+              "exec": [
+                "var exports = `",
+                "function validateschema(testcasename,schemaname,responsedata)",
+                "{",
+                " pm.test(testcasename, function() {",
+                " let fullschema = pm.globals.get(\"fullschema\");",
+                " console.log(\"fullschema \" , fullschema );",
+                " //let schema =getObjData (schema,schemaname);",
+                " let schema =fullschema[schemaname];",
+                " console.log(\"loaded schema \" , schema );",
+                " if(schema == null)",
+                " {",
+                " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                " }",
+                " ",
+                " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                " if (valid !== true) {",
+                " console.log(\"Validation errors: \"+ tv4.error);",
+                " console.log(tv4.error.dataPath); ",
+                " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                " ",
+                " }",
+                " pm.expect(valid).to.be.true;",
+                " });",
+                "}",
+                "function getObjData(obj,key)",
+                "{",
+                " return obj[key];",
+                " ",
+                "}",
+                "var L = function (msg){console.log(msg);};",
+                "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                "function throwing (msg)",
+                "{",
+                " msg = \"Error in Collection Script: \" + msg;",
+                " L(msg);",
+                " throw msg;",
+                "}",
+                "`;",
+                "pm.globals.set(\"commonutil\", exports);"
+              ],
+              "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+            }
+          }
+        ]
+      },
+      {
+        "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+        "name": "GET_DATA",
+        "request": {
+          "url": {
+            "path": [
+              "transcations"
+            ],
+            "host": [
+              "{{API_SERVER_URL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET",
+          "body": {
+            "mode": "raw",
+            "raw": ""
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+              "type": "text/javascript",
+              "exec": [
+                "//load the commonutil",
+                "eval(globals.commonutil);",
+                "// First, run the common tests",
+                "//eval(globals.commonTests)();",
+                "//const schema = pm.globals.get(\"userexistschema\");",
+                "let responsedata = pm.response.json();",
+                "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+              ],
+              "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+            }
+          }
+        ]
+      },
+      {
+        "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+        "name": "GET_POSTS",
+        "request": {
+          "url": {
+            "path": [
+              "posts"
+            ],
+            "host": [
+              "{{API_SERVER_URL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET",
+          "body": {
+            "mode": "raw",
+            "raw": ""
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+              "type": "text/javascript",
+              "exec": [
+                "//load the commonutil",
+                "eval(globals.commonutil);",
+                "// First, run the common tests",
+                "//eval(globals.commonTests)();",
+                "//const schema = pm.globals.get(\"userexistschema\");",
+                "let responsedata = pm.response.json();",
+                "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+              ],
+              "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [],
+    "variable": [],
+    "info": {
+      "_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+      "name": "SENTHILPOSTMAN_AUTOMATION",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment",
+      "postman_exported_at": "2018-12-30T03:57:49.906Z",
+      "postman_exported_using": "Postman/6.6.1"
+    },
+    "id": "42a82707-a3f1-4f64-bcb3-984839ad23e9",
+    "name": "SENTHIL_ENV",
+    "values": [
+      {
+        "description": {
+          "content": "",
+          "type": "text/plain"
+        },
+        "type": "any",
+        "value": "http://localhost:8080",
+        "key": "SCHEMASERVERURL"
+      },
+      {
+        "description": {
+          "content": "",
+          "type": "text/plain"
+        },
+        "type": "any",
+        "value": "http://localhost:3000",
+        "key": "API_SERVER_URL"
+      }
+    ]
+  },
+  "globals": {
+    "id": "e0d9bc44-b767-4683-9b55-7ef4cadeecad",
+    "values": [
+      {
+        "type": "any",
+        "value": "\nfunction validateschema(testcasename,schemaname,responsedata)\n{\n pm.test(testcasename, function() {\n let fullschema = pm.globals.get(\"fullschema\");\n console.log(\"fullschema \" , fullschema );\n //let schema =getObjData (schema,schemaname);\n let schema =fullschema[schemaname];\n console.log(\"loaded schema \" , schema );\n if(schema == null)\n {\n throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");\n }\n \n let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.\n if (valid !== true) {\n console.log(\"Validation errors: \"+ tv4.error);\n console.log(tv4.error.dataPath); \n throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );\n \n }\n pm.expect(valid).to.be.true;\n });\n}\nfunction getObjData(obj,key)\n{\n return obj[key];\n \n}\nvar L = function (msg){console.log(msg);};\n// Postman doesn't log the thrown errors well. Using this tells you the error msg\nfunction throwing (msg)\n{\n msg = \"Error in Collection Script: \" + msg;\n L(msg);\n throw msg;\n}\n",
+        "key": "commonutil"
+      }
+    ]
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 3,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 4,
+        "pending": 0,
+        "failed": 3
+      },
+      "prerequests": {
+        "total": 3,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 3,
+        "pending": 0,
+        "failed": 3
+      },
+      "tests": {
+        "total": 3,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 3,
+        "pending": 0,
+        "failed": 3
+      },
+      "prerequestScripts": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 0,
+      "started": 1546183905553,
+      "completed": 1546183911093
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 3,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "3a3c559d-b442-494d-8bca-eaba174bb04e",
+          "httpRequestId": "80d05728-8c76-4328-9adb-c7057fe5efdd"
+        },
+        "item": {
+          "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+          "name": "LOAD_SCHEMA",
+          "request": {
+            "url": {
+              "path": [
+                "schema.json"
+              ],
+              "host": [
+                "{{SCHEMASERVERURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.globals.set(\"fullschema\", pm.response.json());",
+                  "let fullschema = pm.globals.get(\"fullschema\");",
+                  "console.log(\"fullschema = \" +fullschema);"
+                ],
+                "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                "type": "text/javascript",
+                "exec": [
+                  "var exports = `",
+                  "function validateschema(testcasename,schemaname,responsedata)",
+                  "{",
+                  " pm.test(testcasename, function() {",
+                  " let fullschema = pm.globals.get(\"fullschema\");",
+                  " console.log(\"fullschema \" , fullschema );",
+                  " //let schema =getObjData (schema,schemaname);",
+                  " let schema =fullschema[schemaname];",
+                  " console.log(\"loaded schema \" , schema );",
+                  " if(schema == null)",
+                  " {",
+                  " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                  " }",
+                  " ",
+                  " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                  " if (valid !== true) {",
+                  " console.log(\"Validation errors: \"+ tv4.error);",
+                  " console.log(tv4.error.dataPath); ",
+                  " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                  " ",
+                  " }",
+                  " pm.expect(valid).to.be.true;",
+                  " });",
+                  "}",
+                  "function getObjData(obj,key)",
+                  "{",
+                  " return obj[key];",
+                  " ",
+                  "}",
+                  "var L = function (msg){console.log(msg);};",
+                  "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                  "function throwing (msg)",
+                  "{",
+                  " msg = \"Error in Collection Script: \" + msg;",
+                  " L(msg);",
+                  " throw msg;",
+                  "}",
+                  "`;",
+                  "pm.globals.set(\"commonutil\", exports);"
+                ],
+                "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8080",
+            "path": [
+              "schema.json"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET",
+          "body": {
+            "mode": "raw",
+            "raw": ""
+          }
+        },
+        "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+        "requestError": {
+          "code": "ECONNREFUSED",
+          "errno": "ECONNREFUSED",
+          "syscall": "connect",
+          "address": "127.0.0.1",
+          "port": 8080
+        },
+        "testScript": [
+          {
+            "error": {
+              "type": "Error",
+              "name": "JSONError",
+              "message": "Unexpected token u in JSON at position 0",
+              "checksum": "a53d797a202758a3181fa25e54e2d53a",
+              "id": "ba7cd4e7-44e3-44b5-9e5a-138f5fee1708",
+              "timestamp": 1546183907707,
+              "stacktrace": []
+            }
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "f6f6aa8e-4c51-421c-af80-25af900a83e9",
+          "length": 3,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "7f8c754e-2ce2-4fb5-a7c6-6df31367252e"
+        },
+        "item": {
+          "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+          "name": "GET_DATA",
+          "request": {
+            "url": {
+              "path": [
+                "transcations"
+              ],
+              "host": [
+                "{{API_SERVER_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                "type": "text/javascript",
+                "exec": [
+                  "//load the commonutil",
+                  "eval(globals.commonutil);",
+                  "// First, run the common tests",
+                  "//eval(globals.commonTests)();",
+                  "//const schema = pm.globals.get(\"userexistschema\");",
+                  "let responsedata = pm.response.json();",
+                  "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                  "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                ],
+                "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "transcations"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET",
+          "body": {
+            "mode": "raw",
+            "raw": ""
+          }
+        },
+        "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+        "requestError": {
+          "code": "ECONNREFUSED",
+          "errno": "ECONNREFUSED",
+          "syscall": "connect",
+          "address": "127.0.0.1",
+          "port": 3000
+        },
+        "testScript": [
+          {
+            "error": {
+              "type": "Error",
+              "name": "JSONError",
+              "message": "Unexpected token u in JSON at position 0",
+              "checksum": "a53d797a202758a3181fa25e54e2d53a",
+              "id": "0164e824-898d-44bf-b110-1c9492db5f95",
+              "timestamp": 1546183909370,
+              "stacktrace": []
+            }
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "24dfa100-983c-42aa-82eb-ee2c921e4b98",
+          "length": 3,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "18f16ad1-13ef-42b3-bbc5-5faf1a296947"
+        },
+        "item": {
+          "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+          "name": "GET_POSTS",
+          "request": {
+            "url": {
+              "path": [
+                "posts"
+              ],
+              "host": [
+                "{{API_SERVER_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                "type": "text/javascript",
+                "exec": [
+                  "//load the commonutil",
+                  "eval(globals.commonutil);",
+                  "// First, run the common tests",
+                  "//eval(globals.commonTests)();",
+                  "//const schema = pm.globals.get(\"userexistschema\");",
+                  "let responsedata = pm.response.json();",
+                  "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                  "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                ],
+                "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "posts"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET",
+          "body": {
+            "mode": "raw",
+            "raw": ""
+          }
+        },
+        "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+        "requestError": {
+          "code": "ECONNREFUSED",
+          "errno": "ECONNREFUSED",
+          "syscall": "connect",
+          "address": "127.0.0.1",
+          "port": 3000
+        },
+        "testScript": [
+          {
+            "error": {
+              "type": "Error",
+              "name": "JSONError",
+              "message": "Unexpected token u in JSON at position 0",
+              "checksum": "a53d797a202758a3181fa25e54e2d53a",
+              "id": "28ac0d2f-9992-4273-b5bc-0007bac29dfc",
+              "timestamp": 1546183911046,
+              "stacktrace": []
+            }
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 0
+    },
+    "failures": [
+      {
+        "error": {
+          "code": "ECONNREFUSED",
+          "errno": "ECONNREFUSED",
+          "syscall": "connect",
+          "address": "127.0.0.1",
+          "port": 8080,
+          "name": "Error",
+          "message": "connect ECONNREFUSED 127.0.0.1:8080",
+          "stack": "Error: connect ECONNREFUSED 127.0.0.1:8080\n    at Object.exports._errnoException (util.js:1020:11)\n    at exports._exceptionWithHostPort (util.js:1043:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1086:14)",
+          "checksum": "42054cea4831fdde7194ff90d875f4b2",
+          "id": "26ee2be5-fe6c-48cf-8f71-a9af7d1f1779",
+          "timestamp": 1546183907567,
+          "stacktrace": [
+            {
+              "fileName": "util.js",
+              "lineNumber": 1020,
+              "functionName": "Object.exports._errnoException",
+              "typeName": "Object",
+              "methodName": "exports._errnoException",
+              "columnNumber": 11,
+              "native": false
+            },
+            {
+              "fileName": "util.js",
+              "lineNumber": 1043,
+              "functionName": "exports._exceptionWithHostPort",
+              "typeName": "exports",
+              "methodName": "_exceptionWithHostPort",
+              "columnNumber": 20,
+              "native": false
+            },
+            {
+              "fileName": "net.js",
+              "lineNumber": 1086,
+              "functionName": "TCPConnectWrap.afterConnect [as oncomplete]",
+              "typeName": "TCPConnectWrap",
+              "methodName": "afterConnect [as oncomplete]",
+              "columnNumber": 14,
+              "native": false
+            }
+          ]
+        },
+        "at": "request",
+        "source": {
+          "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+          "name": "LOAD_SCHEMA",
+          "request": {
+            "url": {
+              "path": [
+                "schema.json"
+              ],
+              "host": [
+                "{{SCHEMASERVERURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.globals.set(\"fullschema\", pm.response.json());",
+                  "let fullschema = pm.globals.get(\"fullschema\");",
+                  "console.log(\"fullschema = \" +fullschema);"
+                ],
+                "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                "type": "text/javascript",
+                "exec": [
+                  "var exports = `",
+                  "function validateschema(testcasename,schemaname,responsedata)",
+                  "{",
+                  " pm.test(testcasename, function() {",
+                  " let fullschema = pm.globals.get(\"fullschema\");",
+                  " console.log(\"fullschema \" , fullschema );",
+                  " //let schema =getObjData (schema,schemaname);",
+                  " let schema =fullschema[schemaname];",
+                  " console.log(\"loaded schema \" , schema );",
+                  " if(schema == null)",
+                  " {",
+                  " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                  " }",
+                  " ",
+                  " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                  " if (valid !== true) {",
+                  " console.log(\"Validation errors: \"+ tv4.error);",
+                  " console.log(tv4.error.dataPath); ",
+                  " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                  " ",
+                  " }",
+                  " pm.expect(valid).to.be.true;",
+                  " });",
+                  "}",
+                  "function getObjData(obj,key)",
+                  "{",
+                  " return obj[key];",
+                  " ",
+                  "}",
+                  "var L = function (msg){console.log(msg);};",
+                  "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                  "function throwing (msg)",
+                  "{",
+                  " msg = \"Error in Collection Script: \" + msg;",
+                  " L(msg);",
+                  " throw msg;",
+                  "}",
+                  "`;",
+                  "pm.globals.set(\"commonutil\", exports);"
+                ],
+                "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a"
+          },
+          "item": [
+            {
+              "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+              "name": "LOAD_SCHEMA",
+              "request": {
+                "url": {
+                  "path": [
+                    "schema.json"
+                  ],
+                  "host": [
+                    "{{SCHEMASERVERURL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.globals.set(\"fullschema\", pm.response.json());",
+                      "let fullschema = pm.globals.get(\"fullschema\");",
+                      "console.log(\"fullschema = \" +fullschema);"
+                    ],
+                    "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var exports = `",
+                      "function validateschema(testcasename,schemaname,responsedata)",
+                      "{",
+                      " pm.test(testcasename, function() {",
+                      " let fullschema = pm.globals.get(\"fullschema\");",
+                      " console.log(\"fullschema \" , fullschema );",
+                      " //let schema =getObjData (schema,schemaname);",
+                      " let schema =fullschema[schemaname];",
+                      " console.log(\"loaded schema \" , schema );",
+                      " if(schema == null)",
+                      " {",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                      " }",
+                      " ",
+                      " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                      " if (valid !== true) {",
+                      " console.log(\"Validation errors: \"+ tv4.error);",
+                      " console.log(tv4.error.dataPath); ",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                      " ",
+                      " }",
+                      " pm.expect(valid).to.be.true;",
+                      " });",
+                      "}",
+                      "function getObjData(obj,key)",
+                      "{",
+                      " return obj[key];",
+                      " ",
+                      "}",
+                      "var L = function (msg){console.log(msg);};",
+                      "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                      "function throwing (msg)",
+                      "{",
+                      " msg = \"Error in Collection Script: \" + msg;",
+                      " L(msg);",
+                      " throw msg;",
+                      "}",
+                      "`;",
+                      "pm.globals.set(\"commonutil\", exports);"
+                    ],
+                    "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+              "name": "GET_DATA",
+              "request": {
+                "url": {
+                  "path": [
+                    "transcations"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+              "name": "GET_POSTS",
+              "request": {
+                "url": {
+                  "path": [
+                    "posts"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+            "name": "SENTHILPOSTMAN_AUTOMATION",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 3,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "3a3c559d-b442-494d-8bca-eaba174bb04e",
+          "httpRequestId": "80d05728-8c76-4328-9adb-c7057fe5efdd"
+        }
+      },
+      {
+        "error": {
+          "type": "Error",
+          "name": "JSONError",
+          "message": "Unexpected token u in JSON at position 0",
+          "checksum": "a53d797a202758a3181fa25e54e2d53a",
+          "id": "ba7cd4e7-44e3-44b5-9e5a-138f5fee1708",
+          "timestamp": 1546183907707,
+          "stacktrace": []
+        },
+        "at": "test-script",
+        "source": {
+          "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+          "name": "LOAD_SCHEMA",
+          "request": {
+            "url": {
+              "path": [
+                "schema.json"
+              ],
+              "host": [
+                "{{SCHEMASERVERURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.globals.set(\"fullschema\", pm.response.json());",
+                  "let fullschema = pm.globals.get(\"fullschema\");",
+                  "console.log(\"fullschema = \" +fullschema);"
+                ],
+                "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                "type": "text/javascript",
+                "exec": [
+                  "var exports = `",
+                  "function validateschema(testcasename,schemaname,responsedata)",
+                  "{",
+                  " pm.test(testcasename, function() {",
+                  " let fullschema = pm.globals.get(\"fullschema\");",
+                  " console.log(\"fullschema \" , fullschema );",
+                  " //let schema =getObjData (schema,schemaname);",
+                  " let schema =fullschema[schemaname];",
+                  " console.log(\"loaded schema \" , schema );",
+                  " if(schema == null)",
+                  " {",
+                  " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                  " }",
+                  " ",
+                  " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                  " if (valid !== true) {",
+                  " console.log(\"Validation errors: \"+ tv4.error);",
+                  " console.log(tv4.error.dataPath); ",
+                  " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                  " ",
+                  " }",
+                  " pm.expect(valid).to.be.true;",
+                  " });",
+                  "}",
+                  "function getObjData(obj,key)",
+                  "{",
+                  " return obj[key];",
+                  " ",
+                  "}",
+                  "var L = function (msg){console.log(msg);};",
+                  "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                  "function throwing (msg)",
+                  "{",
+                  " msg = \"Error in Collection Script: \" + msg;",
+                  " L(msg);",
+                  " throw msg;",
+                  "}",
+                  "`;",
+                  "pm.globals.set(\"commonutil\", exports);"
+                ],
+                "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a"
+          },
+          "item": [
+            {
+              "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+              "name": "LOAD_SCHEMA",
+              "request": {
+                "url": {
+                  "path": [
+                    "schema.json"
+                  ],
+                  "host": [
+                    "{{SCHEMASERVERURL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.globals.set(\"fullschema\", pm.response.json());",
+                      "let fullschema = pm.globals.get(\"fullschema\");",
+                      "console.log(\"fullschema = \" +fullschema);"
+                    ],
+                    "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var exports = `",
+                      "function validateschema(testcasename,schemaname,responsedata)",
+                      "{",
+                      " pm.test(testcasename, function() {",
+                      " let fullschema = pm.globals.get(\"fullschema\");",
+                      " console.log(\"fullschema \" , fullschema );",
+                      " //let schema =getObjData (schema,schemaname);",
+                      " let schema =fullschema[schemaname];",
+                      " console.log(\"loaded schema \" , schema );",
+                      " if(schema == null)",
+                      " {",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                      " }",
+                      " ",
+                      " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                      " if (valid !== true) {",
+                      " console.log(\"Validation errors: \"+ tv4.error);",
+                      " console.log(tv4.error.dataPath); ",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                      " ",
+                      " }",
+                      " pm.expect(valid).to.be.true;",
+                      " });",
+                      "}",
+                      "function getObjData(obj,key)",
+                      "{",
+                      " return obj[key];",
+                      " ",
+                      "}",
+                      "var L = function (msg){console.log(msg);};",
+                      "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                      "function throwing (msg)",
+                      "{",
+                      " msg = \"Error in Collection Script: \" + msg;",
+                      " L(msg);",
+                      " throw msg;",
+                      "}",
+                      "`;",
+                      "pm.globals.set(\"commonutil\", exports);"
+                    ],
+                    "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+              "name": "GET_DATA",
+              "request": {
+                "url": {
+                  "path": [
+                    "transcations"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+              "name": "GET_POSTS",
+              "request": {
+                "url": {
+                  "path": [
+                    "posts"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+            "name": "SENTHILPOSTMAN_AUTOMATION",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 3,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "3a3c559d-b442-494d-8bca-eaba174bb04e",
+          "httpRequestId": "80d05728-8c76-4328-9adb-c7057fe5efdd",
+          "scriptId": "b131e84b-19f7-417e-b07b-6978b9be90fa"
+        }
+      },
+      {
+        "error": {
+          "code": "ECONNREFUSED",
+          "errno": "ECONNREFUSED",
+          "syscall": "connect",
+          "address": "127.0.0.1",
+          "port": 3000,
+          "name": "Error",
+          "message": "connect ECONNREFUSED 127.0.0.1:3000",
+          "stack": "Error: connect ECONNREFUSED 127.0.0.1:3000\n    at Object.exports._errnoException (util.js:1020:11)\n    at exports._exceptionWithHostPort (util.js:1043:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1086:14)",
+          "checksum": "a3775de294db36adb2ea5b223fccf332",
+          "id": "fbda462b-edba-49c0-ac42-fceb959303e1",
+          "timestamp": 1546183909308,
+          "stacktrace": [
+            {
+              "fileName": "util.js",
+              "lineNumber": 1020,
+              "functionName": "Object.exports._errnoException",
+              "typeName": "Object",
+              "methodName": "exports._errnoException",
+              "columnNumber": 11,
+              "native": false
+            },
+            {
+              "fileName": "util.js",
+              "lineNumber": 1043,
+              "functionName": "exports._exceptionWithHostPort",
+              "typeName": "exports",
+              "methodName": "_exceptionWithHostPort",
+              "columnNumber": 20,
+              "native": false
+            },
+            {
+              "fileName": "net.js",
+              "lineNumber": 1086,
+              "functionName": "TCPConnectWrap.afterConnect [as oncomplete]",
+              "typeName": "TCPConnectWrap",
+              "methodName": "afterConnect [as oncomplete]",
+              "columnNumber": 14,
+              "native": false
+            }
+          ]
+        },
+        "at": "request",
+        "source": {
+          "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+          "name": "GET_DATA",
+          "request": {
+            "url": {
+              "path": [
+                "transcations"
+              ],
+              "host": [
+                "{{API_SERVER_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                "type": "text/javascript",
+                "exec": [
+                  "//load the commonutil",
+                  "eval(globals.commonutil);",
+                  "// First, run the common tests",
+                  "//eval(globals.commonTests)();",
+                  "//const schema = pm.globals.get(\"userexistschema\");",
+                  "let responsedata = pm.response.json();",
+                  "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                  "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                ],
+                "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a"
+          },
+          "item": [
+            {
+              "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+              "name": "LOAD_SCHEMA",
+              "request": {
+                "url": {
+                  "path": [
+                    "schema.json"
+                  ],
+                  "host": [
+                    "{{SCHEMASERVERURL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.globals.set(\"fullschema\", pm.response.json());",
+                      "let fullschema = pm.globals.get(\"fullschema\");",
+                      "console.log(\"fullschema = \" +fullschema);"
+                    ],
+                    "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var exports = `",
+                      "function validateschema(testcasename,schemaname,responsedata)",
+                      "{",
+                      " pm.test(testcasename, function() {",
+                      " let fullschema = pm.globals.get(\"fullschema\");",
+                      " console.log(\"fullschema \" , fullschema );",
+                      " //let schema =getObjData (schema,schemaname);",
+                      " let schema =fullschema[schemaname];",
+                      " console.log(\"loaded schema \" , schema );",
+                      " if(schema == null)",
+                      " {",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                      " }",
+                      " ",
+                      " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                      " if (valid !== true) {",
+                      " console.log(\"Validation errors: \"+ tv4.error);",
+                      " console.log(tv4.error.dataPath); ",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                      " ",
+                      " }",
+                      " pm.expect(valid).to.be.true;",
+                      " });",
+                      "}",
+                      "function getObjData(obj,key)",
+                      "{",
+                      " return obj[key];",
+                      " ",
+                      "}",
+                      "var L = function (msg){console.log(msg);};",
+                      "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                      "function throwing (msg)",
+                      "{",
+                      " msg = \"Error in Collection Script: \" + msg;",
+                      " L(msg);",
+                      " throw msg;",
+                      "}",
+                      "`;",
+                      "pm.globals.set(\"commonutil\", exports);"
+                    ],
+                    "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+              "name": "GET_DATA",
+              "request": {
+                "url": {
+                  "path": [
+                    "transcations"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+              "name": "GET_POSTS",
+              "request": {
+                "url": {
+                  "path": [
+                    "posts"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+            "name": "SENTHILPOSTMAN_AUTOMATION",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "f6f6aa8e-4c51-421c-af80-25af900a83e9",
+          "length": 3,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "7f8c754e-2ce2-4fb5-a7c6-6df31367252e"
+        }
+      },
+      {
+        "error": {
+          "type": "Error",
+          "name": "JSONError",
+          "message": "Unexpected token u in JSON at position 0",
+          "checksum": "a53d797a202758a3181fa25e54e2d53a",
+          "id": "0164e824-898d-44bf-b110-1c9492db5f95",
+          "timestamp": 1546183909370,
+          "stacktrace": []
+        },
+        "at": "test-script",
+        "source": {
+          "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+          "name": "GET_DATA",
+          "request": {
+            "url": {
+              "path": [
+                "transcations"
+              ],
+              "host": [
+                "{{API_SERVER_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                "type": "text/javascript",
+                "exec": [
+                  "//load the commonutil",
+                  "eval(globals.commonutil);",
+                  "// First, run the common tests",
+                  "//eval(globals.commonTests)();",
+                  "//const schema = pm.globals.get(\"userexistschema\");",
+                  "let responsedata = pm.response.json();",
+                  "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                  "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                ],
+                "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a"
+          },
+          "item": [
+            {
+              "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+              "name": "LOAD_SCHEMA",
+              "request": {
+                "url": {
+                  "path": [
+                    "schema.json"
+                  ],
+                  "host": [
+                    "{{SCHEMASERVERURL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.globals.set(\"fullschema\", pm.response.json());",
+                      "let fullschema = pm.globals.get(\"fullschema\");",
+                      "console.log(\"fullschema = \" +fullschema);"
+                    ],
+                    "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var exports = `",
+                      "function validateschema(testcasename,schemaname,responsedata)",
+                      "{",
+                      " pm.test(testcasename, function() {",
+                      " let fullschema = pm.globals.get(\"fullschema\");",
+                      " console.log(\"fullschema \" , fullschema );",
+                      " //let schema =getObjData (schema,schemaname);",
+                      " let schema =fullschema[schemaname];",
+                      " console.log(\"loaded schema \" , schema );",
+                      " if(schema == null)",
+                      " {",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                      " }",
+                      " ",
+                      " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                      " if (valid !== true) {",
+                      " console.log(\"Validation errors: \"+ tv4.error);",
+                      " console.log(tv4.error.dataPath); ",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                      " ",
+                      " }",
+                      " pm.expect(valid).to.be.true;",
+                      " });",
+                      "}",
+                      "function getObjData(obj,key)",
+                      "{",
+                      " return obj[key];",
+                      " ",
+                      "}",
+                      "var L = function (msg){console.log(msg);};",
+                      "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                      "function throwing (msg)",
+                      "{",
+                      " msg = \"Error in Collection Script: \" + msg;",
+                      " L(msg);",
+                      " throw msg;",
+                      "}",
+                      "`;",
+                      "pm.globals.set(\"commonutil\", exports);"
+                    ],
+                    "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+              "name": "GET_DATA",
+              "request": {
+                "url": {
+                  "path": [
+                    "transcations"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+              "name": "GET_POSTS",
+              "request": {
+                "url": {
+                  "path": [
+                    "posts"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+            "name": "SENTHILPOSTMAN_AUTOMATION",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "f6f6aa8e-4c51-421c-af80-25af900a83e9",
+          "length": 3,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "7f8c754e-2ce2-4fb5-a7c6-6df31367252e",
+          "scriptId": "6fddc1db-5085-4fd3-8c83-815806550601"
+        }
+      },
+      {
+        "error": {
+          "code": "ECONNREFUSED",
+          "errno": "ECONNREFUSED",
+          "syscall": "connect",
+          "address": "127.0.0.1",
+          "port": 3000,
+          "name": "Error",
+          "message": "connect ECONNREFUSED 127.0.0.1:3000",
+          "stack": "Error: connect ECONNREFUSED 127.0.0.1:3000\n    at Object.exports._errnoException (util.js:1020:11)\n    at exports._exceptionWithHostPort (util.js:1043:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1086:14)",
+          "checksum": "a3775de294db36adb2ea5b223fccf332",
+          "id": "339e9f0d-bc2a-4366-ad30-90b7a117cb4e",
+          "timestamp": 1546183910984,
+          "stacktrace": [
+            {
+              "fileName": "util.js",
+              "lineNumber": 1020,
+              "functionName": "Object.exports._errnoException",
+              "typeName": "Object",
+              "methodName": "exports._errnoException",
+              "columnNumber": 11,
+              "native": false
+            },
+            {
+              "fileName": "util.js",
+              "lineNumber": 1043,
+              "functionName": "exports._exceptionWithHostPort",
+              "typeName": "exports",
+              "methodName": "_exceptionWithHostPort",
+              "columnNumber": 20,
+              "native": false
+            },
+            {
+              "fileName": "net.js",
+              "lineNumber": 1086,
+              "functionName": "TCPConnectWrap.afterConnect [as oncomplete]",
+              "typeName": "TCPConnectWrap",
+              "methodName": "afterConnect [as oncomplete]",
+              "columnNumber": 14,
+              "native": false
+            }
+          ]
+        },
+        "at": "request",
+        "source": {
+          "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+          "name": "GET_POSTS",
+          "request": {
+            "url": {
+              "path": [
+                "posts"
+              ],
+              "host": [
+                "{{API_SERVER_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                "type": "text/javascript",
+                "exec": [
+                  "//load the commonutil",
+                  "eval(globals.commonutil);",
+                  "// First, run the common tests",
+                  "//eval(globals.commonTests)();",
+                  "//const schema = pm.globals.get(\"userexistschema\");",
+                  "let responsedata = pm.response.json();",
+                  "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                  "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                ],
+                "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a"
+          },
+          "item": [
+            {
+              "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+              "name": "LOAD_SCHEMA",
+              "request": {
+                "url": {
+                  "path": [
+                    "schema.json"
+                  ],
+                  "host": [
+                    "{{SCHEMASERVERURL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.globals.set(\"fullschema\", pm.response.json());",
+                      "let fullschema = pm.globals.get(\"fullschema\");",
+                      "console.log(\"fullschema = \" +fullschema);"
+                    ],
+                    "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var exports = `",
+                      "function validateschema(testcasename,schemaname,responsedata)",
+                      "{",
+                      " pm.test(testcasename, function() {",
+                      " let fullschema = pm.globals.get(\"fullschema\");",
+                      " console.log(\"fullschema \" , fullschema );",
+                      " //let schema =getObjData (schema,schemaname);",
+                      " let schema =fullschema[schemaname];",
+                      " console.log(\"loaded schema \" , schema );",
+                      " if(schema == null)",
+                      " {",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                      " }",
+                      " ",
+                      " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                      " if (valid !== true) {",
+                      " console.log(\"Validation errors: \"+ tv4.error);",
+                      " console.log(tv4.error.dataPath); ",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                      " ",
+                      " }",
+                      " pm.expect(valid).to.be.true;",
+                      " });",
+                      "}",
+                      "function getObjData(obj,key)",
+                      "{",
+                      " return obj[key];",
+                      " ",
+                      "}",
+                      "var L = function (msg){console.log(msg);};",
+                      "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                      "function throwing (msg)",
+                      "{",
+                      " msg = \"Error in Collection Script: \" + msg;",
+                      " L(msg);",
+                      " throw msg;",
+                      "}",
+                      "`;",
+                      "pm.globals.set(\"commonutil\", exports);"
+                    ],
+                    "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+              "name": "GET_DATA",
+              "request": {
+                "url": {
+                  "path": [
+                    "transcations"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+              "name": "GET_POSTS",
+              "request": {
+                "url": {
+                  "path": [
+                    "posts"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+            "name": "SENTHILPOSTMAN_AUTOMATION",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "24dfa100-983c-42aa-82eb-ee2c921e4b98",
+          "length": 3,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "18f16ad1-13ef-42b3-bbc5-5faf1a296947"
+        }
+      },
+      {
+        "error": {
+          "type": "Error",
+          "name": "JSONError",
+          "message": "Unexpected token u in JSON at position 0",
+          "checksum": "a53d797a202758a3181fa25e54e2d53a",
+          "id": "28ac0d2f-9992-4273-b5bc-0007bac29dfc",
+          "timestamp": 1546183911046,
+          "stacktrace": []
+        },
+        "at": "test-script",
+        "source": {
+          "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+          "name": "GET_POSTS",
+          "request": {
+            "url": {
+              "path": [
+                "posts"
+              ],
+              "host": [
+                "{{API_SERVER_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                "type": "text/javascript",
+                "exec": [
+                  "//load the commonutil",
+                  "eval(globals.commonutil);",
+                  "// First, run the common tests",
+                  "//eval(globals.commonTests)();",
+                  "//const schema = pm.globals.get(\"userexistschema\");",
+                  "let responsedata = pm.response.json();",
+                  "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                  "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                ],
+                "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a"
+          },
+          "item": [
+            {
+              "id": "6c31b566-04fd-4e54-8719-8c20b3133342",
+              "name": "LOAD_SCHEMA",
+              "request": {
+                "url": {
+                  "path": [
+                    "schema.json"
+                  ],
+                  "host": [
+                    "{{SCHEMASERVERURL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.globals.set(\"fullschema\", pm.response.json());",
+                      "let fullschema = pm.globals.get(\"fullschema\");",
+                      "console.log(\"fullschema = \" +fullschema);"
+                    ],
+                    "_lastExecutionId": "88ebcfe4-9e8c-4708-a86f-9f98bdc43b09"
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var exports = `",
+                      "function validateschema(testcasename,schemaname,responsedata)",
+                      "{",
+                      " pm.test(testcasename, function() {",
+                      " let fullschema = pm.globals.get(\"fullschema\");",
+                      " console.log(\"fullschema \" , fullschema );",
+                      " //let schema =getObjData (schema,schemaname);",
+                      " let schema =fullschema[schemaname];",
+                      " console.log(\"loaded schema \" , schema );",
+                      " if(schema == null)",
+                      " {",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+                      " }",
+                      " ",
+                      " let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+                      " if (valid !== true) {",
+                      " console.log(\"Validation errors: \"+ tv4.error);",
+                      " console.log(tv4.error.dataPath); ",
+                      " throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+                      " ",
+                      " }",
+                      " pm.expect(valid).to.be.true;",
+                      " });",
+                      "}",
+                      "function getObjData(obj,key)",
+                      "{",
+                      " return obj[key];",
+                      " ",
+                      "}",
+                      "var L = function (msg){console.log(msg);};",
+                      "// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+                      "function throwing (msg)",
+                      "{",
+                      " msg = \"Error in Collection Script: \" + msg;",
+                      " L(msg);",
+                      " throw msg;",
+                      "}",
+                      "`;",
+                      "pm.globals.set(\"commonutil\", exports);"
+                    ],
+                    "_lastExecutionId": "d092f701-69cd-4a4b-b0e8-4e018f52a26e"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "64418db1-f4ed-411e-92ce-294544e8bb72",
+              "name": "GET_DATA",
+              "request": {
+                "url": {
+                  "path": [
+                    "transcations"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "99471789-a33f-4b0b-beb2-d172fd9ef89a"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1bc8df4-4143-4e1b-a971-5edb662b66bd",
+              "name": "GET_POSTS",
+              "request": {
+                "url": {
+                  "path": [
+                    "posts"
+                  ],
+                  "host": [
+                    "{{API_SERVER_URL}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6fddc1db-5085-4fd3-8c83-815806550601",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//load the commonutil",
+                      "eval(globals.commonutil);",
+                      "// First, run the common tests",
+                      "//eval(globals.commonTests)();",
+                      "//const schema = pm.globals.get(\"userexistschema\");",
+                      "let responsedata = pm.response.json();",
+                      "validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+                      "//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+                    ],
+                    "_lastExecutionId": "799aad52-5403-4fac-9d9d-305520a6b13a"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+            "name": "SENTHILPOSTMAN_AUTOMATION",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "24dfa100-983c-42aa-82eb-ee2c921e4b98",
+          "length": 3,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "18f16ad1-13ef-42b3-bbc5-5faf1a296947",
+          "scriptId": "6fddc1db-5085-4fd3-8c83-815806550601"
+        }
+      }
+    ],
+    "error": null
+  }
+}

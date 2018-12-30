@@ -8,10 +8,14 @@ newman.run({ 
     environment: envjsonPath,
      collection: testjsonPath,
      insecure: true,
-     reporters: ['html', 'progress'],
+     reporters: ['html', 'progress','json'],
      reporter: { 
         html: { 
             export: './htmlResults.html', // If not specified, the file will be written to `newman/` in the current working directory.
+             
+        } ,
+        json: { 
+            export: './results.json', // If not specified, the file will be written to `newman/` in the current working directory.
              
         } 
     } 
