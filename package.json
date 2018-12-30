@@ -1,0 +1,16 @@
+{
+  "name": "replay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node src/testindex.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "newman": "^4.2.2",
+    "@types/newman": "3.10.0",
+    "newman-reporter-html": "1.0.2"
+  }
+}

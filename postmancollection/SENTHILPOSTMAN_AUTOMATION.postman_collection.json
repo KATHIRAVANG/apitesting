@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "989f68a5-da21-4c68-a6cd-8c44f87d616a",
+		"name": "SENTHILPOSTMAN_AUTOMATION",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LOAD_SCHEMA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b131e84b-19f7-417e-b07b-6978b9be90fa",
+						"exec": [
+							"pm.globals.set(\"fullschema\", pm.response.json());",
+							"let fullschema = pm.globals.get(\"fullschema\");",
+							"console.log(\"fullschema = \" +fullschema);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1e15793c-e0f8-49fb-a6b4-359650ec5e48",
+						"exec": [
+							"var exports = `",
+							"function validateschema(testcasename,schemaname,responsedata)",
+							"{",
+							" pm.test(testcasename, function() {",
+							" let fullschema = pm.globals.get(\"fullschema\");",
+							" console.log(\"fullschema \" , fullschema );",
+							" //let schema =getObjData (schema,schemaname);",
+							" let schema =fullschema[schemaname];",
+							" console.log(\"loaded schema \" , schema );",
+							" if(schema == null)",
+							" {",
+							" throw new Error(\"TestCase \"+ testcasename + \" Failed. Passed \"+schemaname +\" not found.Please check in globals and schema is defined\");",
+							" }",
+							" ",
+							" let valid = tv4.validate(responsedata, schema, true ); // checkRecursive and banUnknownProperties.",
+							" if (valid !== true) {",
+							" console.log(\"Validation errors: \"+ tv4.error);",
+							" console.log(tv4.error.dataPath); ",
+							" throw new Error(\"TestCase \"+ testcasename + \" Failed. \"+ tv4.error + \" on path \" +tv4.error.dataPath );",
+							" ",
+							" }",
+							" pm.expect(valid).to.be.true;",
+							" });",
+							"}",
+							"function getObjData(obj,key)",
+							"{",
+							" return obj[key];",
+							" ",
+							"}",
+							"var L = function (msg){console.log(msg);};",
+							"// Postman doesn't log the thrown errors well. Using this tells you the error msg",
+							"function throwing (msg)",
+							"{",
+							" msg = \"Error in Collection Script: \" + msg;",
+							" L(msg);",
+							" throw msg;",
+							"}",
+							"`;",
+							"pm.globals.set(\"commonutil\", exports);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{SCHEMASERVERURL}}/schema.json",
+					"host": [
+						"{{SCHEMASERVERURL}}"
+					],
+					"path": [
+						"schema.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET_DATA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6fddc1db-5085-4fd3-8c83-815806550601",
+						"exec": [
+							"//load the commonutil",
+							"eval(globals.commonutil);",
+							"// First, run the common tests",
+							"//eval(globals.commonTests)();",
+							"//const schema = pm.globals.get(\"userexistschema\");",
+							"let responsedata = pm.response.json();",
+							"validateschema(\"VALIDATE schema GET TRANSCATIONS\",\"transcations\",responsedata);",
+							"//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_SERVER_URL}}/transcations",
+					"host": [
+						"{{API_SERVER_URL}}"
+					],
+					"path": [
+						"transcations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET_POSTS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6fddc1db-5085-4fd3-8c83-815806550601",
+						"exec": [
+							"//load the commonutil",
+							"eval(globals.commonutil);",
+							"// First, run the common tests",
+							"//eval(globals.commonTests)();",
+							"//const schema = pm.globals.get(\"userexistschema\");",
+							"let responsedata = pm.response.json();",
+							"validateschema(\"VALIDATE schema GET POSTS\",\"posts\",responsedata);",
+							"//tests[\"openamtoken is present \" + responsedata.tokenId ] = responsedata.tokenId!=null;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_SERVER_URL}}/posts",
+					"host": [
+						"{{API_SERVER_URL}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
